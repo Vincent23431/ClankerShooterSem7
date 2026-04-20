@@ -1,6 +1,6 @@
 #include <Arduino.h>
 #include "gyroscoop.h"
-#include "Joystick.h"
+#include "joyStick.h"
 #include "display.h"
 #include "Button.h"
 #include "Clanker.h"
