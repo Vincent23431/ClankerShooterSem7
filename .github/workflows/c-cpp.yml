@@ -1,4 +1,4 @@
-name: C/C++ CI
+name: Windows Build CI
 
 on:
   push:
@@ -8,16 +8,22 @@ on:
 
 jobs:
   build:
-
-    runs-on: ubuntu-latest
+    runs-on: windows-latest
 
     steps:
-    - uses: actions/checkout@v4
-    - name: configure
-      run: ./configure
-    - name: make
-      run: make
-    - name: make check
-      run: make check
-    - name: make distcheck
-      run: make distcheck
+    - name: Checkout Repository
+      uses: actions/checkout@v4
+
+    - name: Configure CMake
+      # We tell CMake to look inside your specific code folder
+      run: cmake -S "code/Sem7HiTech_ClankerShooter" -B build
+
+    - name: Build Project
+      # This compiles the code
+      run: cmake --build build --config Release
+
+    - name: Upload Build Artifact
+      uses: actions/upload-artifact@v4
+      with:
+        name: ClankerShooter-Build
+        path: build/Release/
