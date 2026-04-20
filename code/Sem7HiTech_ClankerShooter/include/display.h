@@ -21,6 +21,8 @@ public:
     void drawEnemy(int x, int y, int size, int lastX, int lastY, int lastSize);
     void drawShootEffect();
 
+    void drawGrid(float playerX, float playerZ, float oldPlayerX, float oldPlayerZ);
+
     // Tekent statische UI elementen zoals het vizier
     void drawUI();
 

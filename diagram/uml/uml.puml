@@ -1,0 +1,123 @@
+@startuml ClankerShooter
+!define ABSTRACT abstract
+
+package "Game main" {
+  class GameManager {
+    -playerX: float
+    -playerZ: float
+    -playerAlive: bool
+    -gameOverShown: bool
+    -enemies: Clanker[5]
+    -enemyActive: bool[5]
+    -lastSpawnTime: unsigned long
+    -spawnInterval: unsigned long
+    +spawnEnemy(): void
+    +updateCollision(): void
+    +handleShooting(): void
+    +resetGame(): void
+    +isGameOver(): bool
+  }
+}
+
+package "Game classes" {
+
+  interface IButton {
+      +readButton() : bool
+  }
+
+  class Button {
+      -pin : int
+      -currentState : bool
+      -lastState : bool
+      -lastDebounceTime : unsigned long
+      -debounceDelay : unsigned long
+      -pullUp : bool
+      +Button(buttonPin:int, delay:unsigned long, stateOfPullUp:bool)
+      +readButton() : bool
+  }
+
+  Button <|.. IButton
+
+  class ScreenPos <<struct>> {
+      x : int
+      y : int
+      size : int
+      visible : bool
+  }
+
+  class Clanker {
+      -_x : float
+      -_z : float
+      -_speed : float = 0.4
+      -_hp : int = 100
+      -lastSx : int
+      -lastSy : int
+      -lastSize : int
+      +Clanker(startX:float, startZ:float)
+      +update(pX:float, pZ:float)
+      +calculateProjection(pX:float, pZ:float, pAngle:float) : ScreenPos
+      +takeDamage(amount:int)
+      +isDead() : bool
+      +getHp() : int
+      +getX() : float
+      +getZ() : float
+      +reset(startX:float, startZ:float)
+  }
+
+  class Entity <<struct>> {
+      x : float
+      z : float
+      active : bool
+      lastSx : int
+      lastSy : int
+      lastSize : int
+  }
+
+  class display {
+      -_tft : Adafruit_ILI9341
+      -_screenWidth : int = 320
+      -_screenHeight : int = 240
+      +display(cs:int, dc:int, rst:int)
+      +begin()
+      +clearScreen()
+      +gameOverScreen()
+      +drawEnemy(x:int, y:int, size:int, lastX:int, lastY:int, lastSize:int)
+      +drawShootEffect()
+      +drawUI()
+  }
+
+  class gyroscoop {
+      -_angle : float
+      -_gyroBiasZ : float
+      -_lastUpdate : unsigned long
+      +gyroscoop()
+      +begin() : bool
+      +update()
+      +calibrate(samples:int = 200)
+      +getAngle() : float
+      +resetAngle()
+  }
+
+  class joyStick {
+      -_pinX : int
+      -_pinY : int
+      -_center : int = 2048
+      -_deadzone : int = 200
+      +joyStick(pinX:int, pinY:int)
+      +begin()
+      +getX() : float
+      +getY() : float
+      +isPressed(threshold:int = 3000) : bool
+  }
+
+}
+
+' Relationships
+GameManager --> "0..5" Clanker : manages
+GameManager --> gyroscoop : uses
+GameManager --> joyStick : uses
+GameManager --> display : uses
+GameManager --> "0..4" Button : uses
+Clanker --> ScreenPos : returns
+
+@enduml

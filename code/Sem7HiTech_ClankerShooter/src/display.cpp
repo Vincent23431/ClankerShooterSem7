@@ -30,6 +30,27 @@ void display::gameOverScreen() {
     _tft.println("Je bent geraakt!");
 }
 
+void display::drawGrid(float playerX, float playerZ, float oldPlayerX, float oldPlayerZ) {
+    static int lastOffset = 0; 
+
+    int spacing = 40; // distance between grid lines
+    int offset = (int)playerZ % spacing;
+    int offset2 = (int)oldPlayerZ % spacing;
+
+    for (int y = 120; y < 240; y += spacing) {
+        int lineY = y + offset;
+        int linyY2 = y + offset2;
+
+        if (linyY2 >= 120 && linyY2 < 240) {
+            _tft.drawFastHLine(0, linyY2, 320, ILI9341_BLACK);
+        }
+
+        if (lineY >= 120 && lineY < 240) {
+            _tft.drawFastHLine(0, lineY, 320, ILI9341_DARKGREY);
+        }
+    }
+}
+
 void display::drawUI() {
     _tft.drawFastHLine(155, 120, 10, ILI9341_GREEN);
     _tft.drawFastVLine(160, 115, 10, ILI9341_GREEN);

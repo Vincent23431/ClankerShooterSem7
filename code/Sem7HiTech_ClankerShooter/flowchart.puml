@@ -1,0 +1,33 @@
+﻿@startuml flowchart
+start
+:Initialize hardware & game state;
+if (init OK?) then (yes)
+  :Show title screen;
+else (no)
+  :Display error;
+  stop
+endif
+
+repeat
+  :Read input (joystick/buttons);
+  :Update player position;
+  :Render player & enemies;
+
+  if (shoot button pressed?) then (yes)
+    :Perform shooting logic;
+    :change enemy state;
+    else (no)
+  endif 
+
+  if (player hit?) then (yes)
+    :Show game over;
+    if (retry button pressed?) then (yes)
+      :Reset game state;
+    else (no)
+      stop
+    endif
+  endif
+
+repeat while (true)
+
+@enduml

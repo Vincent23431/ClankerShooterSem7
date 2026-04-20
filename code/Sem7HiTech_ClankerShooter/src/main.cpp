@@ -5,7 +5,7 @@
 #include "Button.h"
 #include "Clanker.h"
 
-/*
+/* planning on working on
 enemy indicator
 zoom
 laser beam
@@ -15,9 +15,14 @@ imu reset
 bullets show
 ammo en reload
 adding good sprits
-plane grid, horizontale and schijn
-adding a batterypack
+update enemys zoals grid verwijder ze en dan over nieuw tekenen
+maak stand voor het geweer (geen code)
 */
+
+/* working on now
+plane grid, horizontale and schijn
+*/
+
 
 #define JOY_X 34 // joystick
 #define JOY_Y 35
@@ -35,16 +40,15 @@ const int BTNPIN2 = 27;
 const int BTNPIN3 = 26;
 const int BTNPIN4 = 25;
 
-
 // Wereld data
 bool playerAlive = true;
 bool gameOverShown = false;
 float playerX = 0, playerZ = 0;
+float oldPlayerX = 0, oldPlayerZ = 0;
 
 // enemys
 unsigned long lastSpawnTime = 0;
 const unsigned long spawnInterval = 2000;
-
 
 const int MAX_ENEMIES = 5;
 bool enemyActive[MAX_ENEMIES] = {false};
@@ -116,9 +120,10 @@ void spawnEnemy() {
   }
 }
 
+
 void loop() {
-  
   // imu
+
   gyro.update();
   float angle = gyro.getAngle();
 
@@ -131,18 +136,20 @@ void loop() {
       printed = true;
     }
 
-    // Alleen de redo knop werkt
+    // redo play again
     if (btn_4->readButton()) {
       Serial.println("Game redo");
       playerAlive = true;
       printed = false;
       playerX = 0;
       playerZ = 0;
+      oldPlayerX = 0;
+      oldPlayerZ = 0; 
 
       // Kill alle enemies
       for (int i = 0; i < MAX_ENEMIES; i++) {
         enemyActive[i] = false;
-        enemies[i].takeDamage(1000); // force kill
+        enemies[i].takeDamage(999999); // force kill
         enemies[i].lastSize = 0;
       }
 
@@ -161,16 +168,21 @@ void loop() {
     Serial.println("Button 3 pressed");
   }
 
-
   // Joystick uitlezen voor beweging speler
   float moveForward = joy.getY(); // -1.0 tot 1.0
   float moveSide = joy.getX();    // -1.0 tot 1.0
 
   // Beweeg speler in de richting waarin hij kijkt
-  if(abs(moveForward) > 0.2) {
+  if(abs(moveForward) > 0.2) { // speed
+    oldPlayerX = playerX;
+    oldPlayerZ = playerZ;
+    
     playerX += sin(angle) * moveForward * 2.0f;
     playerZ += cos(angle) * moveForward * 2.0f;
   }
+  
+  // test
+  screen.drawGrid(playerX, playerZ, oldPlayerX, oldPlayerZ);
 
   // spawner
   unsigned long currentTime = millis();
@@ -189,7 +201,7 @@ void loop() {
     float dz = enemies[i].getZ() - playerZ;
     float distance = sqrt(dx*dx + dz*dz);
 
-    if (distance < 15.0f && !enemies[i].isDead()) {
+    if (distance < 15.0f && !enemies[i].isDead()  ) {
       playerAlive = false;
       Serial.println("GAME OVER!");
     }
@@ -241,7 +253,7 @@ void loop() {
     }
   }
 
-  // Statische UI (vizier)
+  // vezier
   screen.drawUI();
 
   delay(10); 
