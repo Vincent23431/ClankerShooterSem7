@@ -1,0 +1,30 @@
+name: Windows Build CI
+
+on:
+  push:
+    branches: [ "main" ]
+  pull_request:
+    branches: [ "main" ]
+
+jobs:
+  build:
+    runs-on: windows-latest
+
+    steps:
+    - name: Checkout Repository
+      uses: actions/checkout@v4
+
+    - name: Configure CMake
+      # This creates the build directory and prepares the VS Solution
+      run: cmake -S . -B build
+
+    - name: Build Project
+      # This compiles the code in Release mode
+      run: cmake --build build --config Release
+
+    - name: Upload Build Artifact
+      # This makes the .exe available for download on GitHub
+      uses: actions/upload-artifact@v4
+      with:
+        name: ClankerShooter-Build
+        path: build/Release/
