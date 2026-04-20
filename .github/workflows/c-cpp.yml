@@ -1,29 +1,31 @@
-name: Windows Build CI
+name: Arduino Build CI
 
 on:
   push:
     branches: [ "main" ]
-  pull_request:
-    branches: [ "main" ]
 
 jobs:
   build:
-    runs-on: windows-latest
+    runs-on: ubuntu-latest # Linux is faster for Arduino builds
 
     steps:
     - name: Checkout Repository
       uses: actions/checkout@v4
 
-    - name: Configure CMake
-      # We tell CMake to look inside your specific code folder
-      run: cmake -S "code/Sem7HiTech_ClankerShooter" -B build
+    - name: Set up Python
+      uses: actions/setup-python@v5
+      with:
+        python-version: '3.x'
+
+    - name: Install PlatformIO
+      run: pip install -U platformio
 
     - name: Build Project
-      # This compiles the code
-      run: cmake --build build --config Release
+      # This runs the build inside your specific subfolder
+      run: pio run -d "code/Sem7HiTech_ClankerShooter"
 
-    - name: Upload Build Artifact
+    - name: Upload Firmware
       uses: actions/upload-artifact@v4
       with:
-        name: ClankerShooter-Build
-        path: build/Release/
+        name: Gun-Firmware
+        path: code/Sem7HiTech_ClankerShooter/.pio/build/*/firmware.hex
