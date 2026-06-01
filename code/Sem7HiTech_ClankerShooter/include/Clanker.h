@@ -25,13 +25,14 @@ public:
     float getX() { return _x; }
     float getZ() { return _z; }
     void reset(float startX, float startZ);
+    bool checkHit(int hx, int hy, float pX, float pZ, float pAngle);
 
     // Variabelen om de vorige tekenbeurt te onthouden (voor het wissen)
     int lastSx, lastSy, lastSize;
 
 private:
     float _x, _z;
-    const float _speed = 0.4f; 
+    const float _speed = 1.0f; 
     int _hp = 100;
 };
 

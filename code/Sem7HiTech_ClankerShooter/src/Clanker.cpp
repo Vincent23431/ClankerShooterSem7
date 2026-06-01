@@ -33,17 +33,45 @@ ScreenPos Clanker::calculateProjection(float pX, float pZ, float pAngle) {
     float dx = _x - pX;
     float dz = _z - pZ;
 
-    // Camera rotatie (radialen)
     float rotX = dx * cos(-pAngle) - dz * sin(-pAngle);
     float rotZ = dx * sin(-pAngle) + dz * cos(-pAngle);
 
-    if (rotZ > 5.0f) { // Alleen zichtbaar als het voor de speler is
+    // Door rotZ + een getal te doen (bijv. 10), wordt de groei minder extreem
+    if (rotZ > 2.0f) { 
         sp.visible = true;
-        sp.size = (int)(2000 / rotZ); // Hoe dichterbij (kleine rotZ), hoe groter het vierkant
-        sp.x = 160 + (int)(rotX * 250 / rotZ); // Perspectief: dingen aan de zijkant vliegen sneller weg
+        sp.size = (int)(1800 / (rotZ + 8.0f));
+        sp.x = 160 + (int)(rotX * 200 / rotZ);
         sp.y = 120;
     } else {
         sp.visible = false;
     }
+
+    sp.size = (int)(6000 / (rotZ + 8.0f));
+
+    // Serial.print("rotZ=");
+    // Serial.print(rotZ);
+    // Serial.print(" size=");
+    // Serial.println(sp.size);
     return sp;
+}
+
+bool Clanker::checkHit(int hx, int hy, float pX, float pZ, float pAngle) {
+    // 1. Bereken waar de vijand op dit moment op het scherm staat
+    ScreenPos pos = calculateProjection(pX, pZ, pAngle);
+
+    // 2. Als de vijand niet in beeld is, kun je hem nooit raken
+    if (!pos.visible) return false;
+
+    // 3. De Hitbox bepalen
+    // Omdat we een sprite van 16x16 tekenen, gebruiken we een vaste marge.
+    // We maken de hitbox iets ruimer (bijv. 10 pixels naar elke kant) 
+    // zodat het spel niet frustrerend moeilijk wordt.
+    int hitboxSize = 10; 
+
+    if (hx > (pos.x - hitboxSize) && hx < (pos.x + hitboxSize) &&
+        hy > (pos.y - hitboxSize) && hy < (pos.y + hitboxSize)) {
+        return true;
+    }
+
+    return false;
 }

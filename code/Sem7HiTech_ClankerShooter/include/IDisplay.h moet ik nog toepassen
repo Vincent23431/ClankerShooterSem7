@@ -1,0 +1,24 @@
+// #ifndef IDISPLAY_H
+// #define IDISPLAY_H
+
+// #include <Arduino.h>
+
+// class IDISPLAY { // name DISPLAY is already a macro in Arduino.h
+
+//     public:
+//     virtual void clearScreen();
+//     virtual void gameOverScreen(int killCount);
+//     virtual void drawEnemy(int x, int y, int size, int lastX, int lastY, int lastSize);
+//     virtual void drawShootEffect();
+//     virtual void drawGrid(float playerX, float playerZ, float oldPlayerX, float oldPlayerZ);
+//     virtual void drawEnemyIndicator(int side); // boven en onder voor de toekomst mss er bij
+//     virtual void drawUI(int killCount);
+//     virtual void begin() override;
+//     virtual void clearBuffer() override;
+//     virtual void showData(String data[], int lineCount) override;
+//     virtual int getDisplayWidth() override;
+//     virtual int getDisplayHeight() override;
+// };
+// };
+
+// #endif // DISPLAY_H

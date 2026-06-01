@@ -1,13 +1,13 @@
-#ifndef joyStick_H
-#define joyStick_H
+#ifndef JoyStick_H
+#define JoyStick_H
 
 // #include <Arduino_LSM6DSOX.h>
 #include <Adafruit_GFX.h>
 #include <Adafruit_ILI9341.h>
 
-class joyStick {
+class JoyStick {
 public:
-    joyStick(int pinX, int pinY);
+    JoyStick(int pinX, int pinY);
     void begin();
     
     // Returns values from -1.0 to 1.0
