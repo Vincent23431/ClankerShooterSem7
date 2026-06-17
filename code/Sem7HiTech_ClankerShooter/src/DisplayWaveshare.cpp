@@ -1,6 +1,6 @@
 #include "DisplayWaveshare.h"
 #include <math.h>
-#include "bitmaps.h"
+#include "Bitmaps.h"
 
 DisplayWaveshare::DisplayWaveshare(int cs, int dc, int rst) : _tft(cs, dc, rst) {}
 
