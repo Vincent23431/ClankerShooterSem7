@@ -6,7 +6,7 @@ on:
 
 jobs:
   build:
-    runs-on: ubuntu-latest # Linux is faster for Arduino builds
+    runs-on: ubuntu-latest # Linux is lekker snel voor builds
 
     steps:
     - name: Checkout Repository
@@ -20,17 +20,17 @@ jobs:
     - name: Install PlatformIO
       run: pip install -U platformio
 
-    # --- UPDATED: Only build the ESP32 environment ---
+    # 1. Controleer of de echte code netjes bouwt voor de ESP32 Microcontroller
     - name: Build Project (ESP32)
       run: pio run -d "code/Sem7HiTech_ClankerShooter" -e esp32doit-devkit-v1
 
-    # --- ADDED: Run the unit tests natively ---
+    # 2. NIEUW: Voer automatisch al je unit tests uit op de virtuele PC van GitHub
     - name: Run Unit Tests (Native)
       run: pio test -d "code/Sem7HiTech_ClankerShooter" -e native
 
+    # 3. Sla de firmware op als het bouwen en testen is geslaagd
     - name: Upload Firmware
       uses: actions/upload-artifact@v4
       with:
         name: Gun-Firmware
-        # Changed .hex to .bin since ESP32 uses .bin files
         path: code/Sem7HiTech_ClankerShooter/.pio/build/esp32doit-devkit-v1/firmware.bin
