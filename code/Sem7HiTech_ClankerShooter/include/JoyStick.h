@@ -1,5 +1,5 @@
-#ifndef JoyStick_H
-#define JoyStick_H
+#ifndef JOYSTICK_H
+#define JOYSTICK_H
 
 // #include <Arduino_LSM6DSOX.h>
 #include <Adafruit_GFX.h>
