@@ -1,6 +1,14 @@
 #include "Radar.h"
 #include <math.h>
 
+#ifndef PI
+  #ifdef M_PI
+    #define PI M_PI
+  #else
+    #define PI 3.14159265358979323846f
+  #endif
+#endif 
+
 Radar::Radar(int maxEnemies) {
     _maxEnemies = maxEnemies;
 }
